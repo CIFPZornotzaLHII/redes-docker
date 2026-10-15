@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">Los tres drivers: none, bridge y host</title>
+  <desc id="desc">Comparación visual de un contenedor con driver none (solo loopback, sin salida), bridge (IP propia, docker0 y NAT hacia el eth0 del host) y host (comparte la pila de red del host y su IP).</desc>
+  <defs>
+    <style>
+      text { font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif; fill: #1f2328; }
+      .mono { font-family: Consolas, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace; }
+      .title { font-size: 22px; font-weight: 700; }
+      .sub { font-size: 14px; fill: #59636e; }
+      .drv { font-size: 21px; font-weight: 700; }
+      .cmd { font-size: 11.5px; fill: #424a53; }
+      .hostlbl { font-size: 11px; font-weight: 700; fill: #59636e; letter-spacing: 1px; }
+      .h { font-size: 14px; font-weight: 700; }
+      .ip { font-size: 12px; }
+      .small { font-size: 12px; fill: #424a53; }
+      .fact { font-size: 12.5px; fill: #424a53; }
+      .v { font-size: 12.5px; font-weight: 700; }
+      .ok { fill: #1a7f37; }
+      .ko { fill: #cf222e; }
+      .warn { fill: #9a6700; }
+      .hostc { fill: #bc4c00; }
+      .muted { fill: #59636e; }
+    </style>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="959" height="559" rx="14" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="28" y="42" class="title">Los tres drivers que vais a tocar hoy</text>
+  <text x="28" y="66" class="sub">El mismo contenedor conectado de tres formas distintas</text>
+
+  <!-- ============ NONE ============ -->
+  <rect x="24" y="84" width="296" height="452" rx="12" fill="#ffffff"/>
+  <rect x="24" y="84" width="296" height="58" rx="12" fill="#eaeef2"/>
+  <rect x="24" y="120" width="296" height="22" fill="#eaeef2"/>
+  <rect x="24" y="84" width="296" height="452" rx="12" fill="none" stroke="#8c959f" stroke-width="1.5"/>
+  <text x="40" y="110" class="drv">none</text>
+  <text x="40" y="131" class="mono cmd">docker run --network none …</text>
+
+  <rect x="38" y="156" width="268" height="238" rx="10" fill="#f6f8fa" stroke="#8c959f" stroke-dasharray="5 4"/>
+  <text x="50" y="175" class="hostlbl">HOST</text>
+
+  <rect x="64" y="190" width="216" height="108" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="172" y="212" text-anchor="middle" class="h">contenedor</text>
+  <rect x="90" y="226" width="164" height="26" rx="6" fill="#ffffff" stroke="#54aeff"/>
+  <text x="172" y="244" text-anchor="middle" class="mono ip">lo · 127.0.0.1</text>
+  <text x="172" y="280" text-anchor="middle" class="small ko">sin eth0: no hay cable</text>
+
+  <line x1="172" y1="298" x2="172" y2="352" stroke="#cf222e" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <circle cx="172" cy="325" r="11" fill="#cf222e"/>
+  <path d="M167,320 L177,330 M177,320 L167,330" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <rect x="84" y="352" width="176" height="28" rx="14" fill="#ffffff" stroke="#57606a"/>
+  <text x="172" y="371" text-anchor="middle" class="mono ip">eth0 · 192.168.1.20</text>
+  <line x1="172" y1="380" x2="172" y2="408" stroke="#57606a" stroke-width="2"/>
+  <rect x="122" y="408" width="100" height="28" rx="14" fill="#eaeef2"/>
+  <text x="172" y="427" text-anchor="middle" class="h" style="font-size:12.5px">Internet</text>
+
+  <line x1="40" y1="448" x2="304" y2="448" stroke="#d0d7de"/>
+  <text x="40" y="470" class="fact">IP propia</text>
+  <text x="304" y="470" text-anchor="end" class="v ko">No</text>
+  <text x="40" y="494" class="fact">Salida a Internet</text>
+  <text x="304" y="494" text-anchor="end" class="v ko">No</text>
+  <text x="40" y="518" class="fact">¿Hace falta -p?</text>
+  <text x="304" y="518" text-anchor="end" class="v muted">No aplica</text>
+
+  <!-- ============ BRIDGE ============ -->
+  <rect x="332" y="84" width="296" height="452" rx="12" fill="#ffffff"/>
+  <rect x="332" y="84" width="296" height="58" rx="12" fill="#fff8c5"/>
+  <rect x="332" y="120" width="296" height="22" fill="#fff8c5"/>
+  <rect x="332" y="84" width="296" height="452" rx="12" fill="none" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="348" y="110" class="drv">bridge</text>
+  <text x="420" y="110" class="small warn" style="font-weight:700">(por defecto)</text>
+  <text x="348" y="131" class="mono cmd">docker run …</text>
+
+  <rect x="346" y="156" width="268" height="238" rx="10" fill="#f6f8fa" stroke="#8c959f" stroke-dasharray="5 4"/>
+  <text x="358" y="175" class="hostlbl">HOST</text>
+
+  <rect x="372" y="186" width="216" height="72" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="480" y="207" text-anchor="middle" class="h">contenedor</text>
+  <rect x="398" y="218" width="164" height="26" rx="6" fill="#ffffff" stroke="#54aeff"/>
+  <text x="480" y="236" text-anchor="middle" class="mono ip">eth0 · 172.17.0.2</text>
+
+  <line x1="480" y1="258" x2="480" y2="282" stroke="#0969da" stroke-width="3"/>
+  <rect x="372" y="282" width="216" height="40" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="480" y="307" text-anchor="middle" class="h" style="font-size:13px">docker0 + NAT</text>
+  <line x1="480" y1="322" x2="480" y2="352" stroke="#1a7f37" stroke-width="3"/>
+
+  <rect x="392" y="352" width="176" height="28" rx="14" fill="#ffffff" stroke="#57606a"/>
+  <text x="480" y="371" text-anchor="middle" class="mono ip">eth0 · 192.168.1.20</text>
+  <line x1="480" y1="380" x2="480" y2="408" stroke="#1a7f37" stroke-width="2.5"/>
+  <rect x="430" y="408" width="100" height="28" rx="14" fill="#eaeef2"/>
+  <text x="480" y="427" text-anchor="middle" class="h" style="font-size:12.5px">Internet</text>
+
+  <line x1="348" y1="448" x2="612" y2="448" stroke="#d0d7de"/>
+  <text x="348" y="470" class="fact">IP propia</text>
+  <text x="612" y="470" text-anchor="end" class="v ok">Sí · 172.17.x.x</text>
+  <text x="348" y="494" class="fact">Salida a Internet</text>
+  <text x="612" y="494" text-anchor="end" class="v ok">Sí · vía NAT</text>
+  <text x="348" y="518" class="fact">¿Hace falta -p?</text>
+  <text x="612" y="518" text-anchor="end" class="v warn">Sí, para entrar</text>
+
+  <!-- ============ HOST ============ -->
+  <rect x="640" y="84" width="296" height="452" rx="12" fill="#ffffff"/>
+  <rect x="640" y="84" width="296" height="58" rx="12" fill="#fff1e5"/>
+  <rect x="640" y="120" width="296" height="22" fill="#fff1e5"/>
+  <rect x="640" y="84" width="296" height="452" rx="12" fill="none" stroke="#bc4c00" stroke-width="1.5"/>
+  <text x="656" y="110" class="drv">host</text>
+  <text x="656" y="131" class="mono cmd">docker run --network host …</text>
+
+  <rect x="654" y="156" width="268" height="238" rx="10" fill="#f6f8fa" stroke="#8c959f" stroke-dasharray="5 4"/>
+  <text x="666" y="175" class="hostlbl">HOST</text>
+
+  <rect x="668" y="186" width="240" height="202" rx="10" fill="#ddf4ff" fill-opacity="0.55" stroke="#0969da" stroke-width="2" stroke-dasharray="7 4"/>
+  <text x="788" y="208" text-anchor="middle" class="h">contenedor</text>
+  <text x="788" y="228" text-anchor="middle" class="small">no tiene burbuja de red propia:</text>
+  <text x="788" y="245" text-anchor="middle" class="small">ve todas las interfaces del host</text>
+  <text x="788" y="274" text-anchor="middle" class="mono ip">lo · eth0 · docker0</text>
+  <text x="788" y="294" text-anchor="middle" class="mono ip">br-… · veth…</text>
+  <text x="788" y="338" text-anchor="middle" class="small hostc" style="font-weight:700">¡su IP es la del host!</text>
+
+  <rect x="700" y="352" width="176" height="28" rx="14" fill="#ffffff" stroke="#bc4c00" stroke-width="1.5"/>
+  <text x="788" y="371" text-anchor="middle" class="mono ip">eth0 · 192.168.1.20</text>
+  <line x1="788" y1="380" x2="788" y2="408" stroke="#1a7f37" stroke-width="2.5"/>
+  <rect x="738" y="408" width="100" height="28" rx="14" fill="#eaeef2"/>
+  <text x="788" y="427" text-anchor="middle" class="h" style="font-size:12.5px">Internet</text>
+
+  <line x1="656" y1="448" x2="920" y2="448" stroke="#d0d7de"/>
+  <text x="656" y="470" class="fact">IP propia</text>
+  <text x="920" y="470" text-anchor="end" class="v hostc">No · usa la del host</text>
+  <text x="656" y="494" class="fact">Salida a Internet</text>
+  <text x="920" y="494" text-anchor="end" class="v ok">Sí · directa</text>
+  <text x="656" y="518" class="fact">¿Hace falta -p?</text>
+  <text x="920" y="518" text-anchor="end" class="v hostc">No</text>
+</svg>

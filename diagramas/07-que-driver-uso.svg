@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">¿Qué driver de red uso?</title>
+  <desc id="desc">Árbol de decisión. ¿Totalmente aislado? none. ¿Habla con contenedores de otras máquinas? overlay. ¿Debe parecer un equipo físico de la LAN? macvlan o ipvlan. ¿Necesita la red del host tal cual? host. Si no, bridge personalizada.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif; fill: #1f2328; }
+      .mono { font-family: Consolas, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace; }
+      .title { font-size: 22px; font-weight: 700; }
+      .sub { font-size: 14px; fill: #59636e; }
+      .q { font-size: 14.5px; font-weight: 700; }
+      .qs { font-size: 12.5px; fill: #59636e; }
+      .drv { font-size: 15px; font-weight: 700; }
+      .ds { font-size: 12.5px; fill: #424a53; }
+      .yes { font-size: 13px; font-weight: 700; fill: #1a7f37; }
+      .no { font-size: 13px; font-weight: 700; fill: #cf222e; }
+      .fin { font-size: 17px; font-weight: 700; }
+      .fins { font-size: 13px; fill: #1f2328; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="959" height="559" rx="14" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="28" y="42" class="title">¿Qué driver uso?</text>
+  <text x="28" y="66" class="sub">Recorred las preguntas de arriba abajo: el primer «sí» decide</text>
+
+  <!-- Flechas "No" -->
+  <g stroke="#57606a" stroke-width="2" marker-end="url(#arrow)">
+    <line x1="260" y1="160" x2="260" y2="184"/>
+    <line x1="260" y1="250" x2="260" y2="274"/>
+    <line x1="260" y1="340" x2="260" y2="364"/>
+    <line x1="260" y1="430" x2="260" y2="454"/>
+  </g>
+  <text x="272" y="178" class="no">No</text>
+  <text x="272" y="268" class="no">No</text>
+  <text x="272" y="358" class="no">No</text>
+  <text x="272" y="448" class="no">No</text>
+
+  <!-- Flechas "Sí" -->
+  <g stroke="#57606a" stroke-width="2" marker-end="url(#arrow)">
+    <line x1="480" y1="128" x2="596" y2="128"/>
+    <line x1="480" y1="218" x2="596" y2="218"/>
+    <line x1="480" y1="308" x2="596" y2="308"/>
+    <line x1="480" y1="398" x2="596" y2="398"/>
+  </g>
+  <text x="538" y="120" text-anchor="middle" class="yes">Sí</text>
+  <text x="538" y="210" text-anchor="middle" class="yes">Sí</text>
+  <text x="538" y="300" text-anchor="middle" class="yes">Sí</text>
+  <text x="538" y="390" text-anchor="middle" class="yes">Sí</text>
+
+  <!-- Preguntas -->
+  <g fill="#ffffff" stroke="#57606a" stroke-width="1.5">
+    <rect x="40" y="96" width="440" height="64" rx="12"/>
+    <rect x="40" y="186" width="440" height="64" rx="12"/>
+    <rect x="40" y="276" width="440" height="64" rx="12"/>
+    <rect x="40" y="366" width="440" height="64" rx="12"/>
+  </g>
+  <text x="60" y="124" class="q">¿Debe estar totalmente aislado, sin red?</text>
+  <text x="60" y="144" class="qs">p. ej. un proceso batch que solo lee y escribe ficheros</text>
+  <text x="60" y="214" class="q">¿Habla con contenedores de OTRAS máquinas?</text>
+  <text x="60" y="234" class="qs">varios servidores formando un clúster (Docker Swarm)</text>
+  <text x="60" y="304" class="q">¿Debe parecer un equipo físico más de la LAN?</text>
+  <text x="60" y="324" class="qs">con una IP que le da el router, como un PC más</text>
+  <text x="60" y="394" class="q">¿Necesita usar la red del host tal cual?</text>
+  <text x="60" y="414" class="qs">máximo rendimiento, herramientas de monitorización de red…</text>
+
+  <!-- Resultados -->
+  <rect x="600" y="96" width="320" height="64" rx="12" fill="#eaeef2" stroke="#57606a" stroke-width="2"/>
+  <text x="620" y="124" class="mono drv">--network none</text>
+  <text x="620" y="144" class="ds">Solo loopback. Máximo aislamiento.</text>
+
+  <rect x="600" y="186" width="320" height="64" rx="12" fill="#fbefff" stroke="#8250df" stroke-width="2"/>
+  <text x="620" y="214" class="mono drv">-d overlay</text>
+  <text x="620" y="234" class="ds">Una red que abarca varios hosts.</text>
+
+  <rect x="600" y="276" width="320" height="64" rx="12" fill="#d8f3f1" stroke="#1b7c83" stroke-width="2"/>
+  <text x="620" y="304" class="mono drv">-d macvlan · -d ipvlan</text>
+  <text x="620" y="324" class="ds">IP real de la LAN. Solo Linux nativo.</text>
+
+  <rect x="600" y="366" width="320" height="64" rx="12" fill="#fff1e5" stroke="#bc4c00" stroke-width="2"/>
+  <text x="620" y="394" class="mono drv">--network host</text>
+  <text x="620" y="414" class="ds">Sin aislamiento: IP y puertos del host.</text>
+
+  <!-- Final -->
+  <rect x="40" y="458" width="880" height="78" rx="12" fill="#dafbe1" stroke="#1a7f37" stroke-width="2.5"/>
+  <text x="60" y="490" class="fin">Bridge personalizada · <tspan class="mono" style="font-size:15px">docker network create mi-red</tspan></text>
+  <text x="60" y="516" class="fins">La opción sensata para casi todo: DNS por nombre + aislamiento. La bridge por defecto, solo para pruebas rápidas.</text>
+</svg>

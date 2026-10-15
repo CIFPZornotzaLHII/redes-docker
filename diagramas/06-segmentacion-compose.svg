@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitectura segmentada con Docker Compose</title>
+  <desc id="desc">tienda-web está solo en red-publica, base-datos solo en red-privada y logica-negocio en ambas redes, con dos interfaces. tienda-web puede hablar con logica-negocio y logica-negocio con base-datos, pero tienda-web no llega a base-datos ni por nombre ni por IP. Con internal: true, base-datos tampoco sale a Internet.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif; fill: #1f2328; }
+      .mono { font-family: Consolas, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace; }
+      .title { font-size: 22px; font-weight: 700; }
+      .sub { font-size: 14px; fill: #59636e; }
+      .net { font-size: 15px; font-weight: 700; }
+      .h { font-size: 14px; font-weight: 700; }
+      .img { font-size: 11.5px; fill: #424a53; }
+      .pill { font-size: 11px; }
+      .lbl { font-size: 12.5px; font-weight: 700; }
+      .small { font-size: 11.5px; fill: #59636e; }
+      .leg { font-size: 12.5px; fill: #1f2328; }
+      .ok { fill: #1a7f37; }
+      .ko { fill: #cf222e; }
+      .purple { fill: #8250df; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
+    </marker>
+    <g id="i-ok">
+      <circle r="10" fill="#1a7f37"/>
+      <path d="M-5,0.5 L-1.4,4.2 L5,-3.4" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g id="i-ko">
+      <circle r="10" fill="#cf222e"/>
+      <path d="M-4,-4 L4,4 M4,-4 L-4,4" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="959" height="539" rx="14" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="28" y="42" class="title">Parte 4: arquitectura segmentada con Compose</text>
+  <text x="28" y="66" class="sub">Cada servicio solo puede hablar con quien comparte al menos una red con él</text>
+
+  <!-- Zonas de red -->
+  <rect x="180" y="96" width="420" height="340" rx="18" fill="#dafbe1" fill-opacity="0.6" stroke="#1a7f37" stroke-width="2"/>
+  <rect x="430" y="96" width="420" height="340" rx="18" fill="#fbefff" fill-opacity="0.6" stroke="#8250df" stroke-width="2"/>
+  <rect x="180" y="96" width="420" height="340" rx="18" fill="none" stroke="#1a7f37" stroke-width="2"/>
+  <text x="515" y="166" text-anchor="middle" class="small" style="font-weight:700">en las dos redes</text>
+  <text x="200" y="124" class="net ok">red-publica</text>
+  <text x="830" y="124" text-anchor="end" class="net purple">red-privada</text>
+
+  <!-- Navegador -->
+  <rect x="24" y="214" width="132" height="72" rx="10" fill="#ffffff" stroke="#57606a" stroke-width="1.5"/>
+  <text x="90" y="244" text-anchor="middle" class="h">Navegador</text>
+  <text x="90" y="266" text-anchor="middle" class="mono img">localhost:8080</text>
+  <text x="90" y="306" text-anchor="middle" class="mono small">ports: "8080:80"</text>
+  <line x1="156" y1="250" x2="202" y2="250" stroke="#57606a" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- Conexiones permitidas -->
+  <line x1="376" y1="226" x2="435" y2="226" stroke="#1a7f37" stroke-width="3"/>
+  <line x1="595" y1="226" x2="650" y2="226" stroke="#1a7f37" stroke-width="3"/>
+
+  <!-- Conexión prohibida -->
+  <path d="M291,296 C291,410 735,410 735,296" fill="none" stroke="#cf222e" stroke-width="2.5" stroke-dasharray="7 5"/>
+
+  <!-- tienda-web -->
+  <rect x="206" y="196" width="170" height="100" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="291" y="222" text-anchor="middle" class="h">tienda-web</text>
+  <text x="291" y="241" text-anchor="middle" class="mono img">nginx:alpine</text>
+  <rect x="220" y="256" width="142" height="26" rx="6" fill="#ffffff" stroke="#1a7f37"/>
+  <text x="291" y="273" text-anchor="middle" class="mono pill">eth0 · red-publica</text>
+
+  <!-- logica-negocio -->
+  <rect x="435" y="186" width="160" height="116" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="515" y="210" text-anchor="middle" class="h">logica-negocio</text>
+  <text x="515" y="229" text-anchor="middle" class="mono img">curlimages/curl</text>
+  <rect x="443" y="242" width="144" height="24" rx="6" fill="#ffffff" stroke="#1a7f37"/>
+  <text x="515" y="258" text-anchor="middle" class="mono pill">eth0 · red-publica</text>
+  <rect x="443" y="271" width="144" height="24" rx="6" fill="#ffffff" stroke="#8250df"/>
+  <text x="515" y="287" text-anchor="middle" class="mono pill">eth1 · red-privada</text>
+
+  <!-- base-datos -->
+  <rect x="650" y="196" width="170" height="100" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="735" y="222" text-anchor="middle" class="h">base-datos</text>
+  <text x="735" y="241" text-anchor="middle" class="mono img">postgres:alpine</text>
+  <rect x="664" y="256" width="142" height="26" rx="6" fill="#ffffff" stroke="#8250df"/>
+  <text x="735" y="273" text-anchor="middle" class="mono pill">eth0 · red-privada</text>
+
+  <!-- Iconos sobre las conexiones -->
+  <use href="#i-ok" x="405" y="226"/>
+  <use href="#i-ok" x="622" y="226"/>
+  <use href="#i-ko" x="513" y="381"/>
+  <text x="513" y="414" text-anchor="middle" class="mono lbl ko">ping base-datos → bad address</text>
+
+  <!-- Internet (reto internal: true) -->
+  <rect x="868" y="222" width="72" height="56" rx="10" fill="#eaeef2"/>
+  <text x="904" y="255" text-anchor="middle" class="h" style="font-size:13px">Internet</text>
+  <line x1="820" y1="250" x2="866" y2="250" stroke="#cf222e" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <use href="#i-ko" x="846" y="250"/>
+  <text x="904" y="300" text-anchor="middle" class="mono small ko" style="font-weight:700">internal: true</text>
+  <text x="904" y="316" text-anchor="middle" class="small">(reto extra)</text>
+
+  <!-- Leyenda -->
+  <use href="#i-ok" x="40" y="470"/>
+  <text x="58" y="475" class="leg">Permitido: comparten al menos una red</text>
+  <use href="#i-ko" x="340" y="470"/>
+  <text x="358" y="475" class="leg">Bloqueado: no se encuentran ni por nombre (DNS) ni por IP</text>
+  <text x="28" y="510" class="small">Compose crea las redes con el nombre del proyecto delante: <tspan class="mono">&lt;carpeta&gt;_red-publica</tspan> y <tspan class="mono">&lt;carpeta&gt;_red-privada</tspan>. Las IPs reales las asigna Docker.</text>
+</svg>

@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">Publicar puertos: abrir puertas en el host</title>
+  <desc id="desc">Cuatro casos. Con -p 8080:80 el puerto se abre en 0.0.0.0 y entra cualquiera. Con -p 127.0.0.1:8081:80 solo se entra desde el propio host. Sin -p no hay puerta y solo otros contenedores de la red llegan al contenedor. Con --network host el contenedor escucha directamente en el puerto 80 del host, sin NAT.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif; fill: #1f2328; }
+      .mono { font-family: Consolas, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace; }
+      .title { font-size: 22px; font-weight: 700; }
+      .sub { font-size: 14px; fill: #59636e; }
+      .col { font-size: 11.5px; font-weight: 700; fill: #59636e; letter-spacing: 0.8px; }
+      .actor { font-size: 12.5px; }
+      .door { font-size: 13px; font-weight: 700; }
+      .doornote { font-size: 11px; fill: #59636e; }
+      .h { font-size: 14px; font-weight: 700; }
+      .ip { font-size: 12px; }
+      .cmd { font-size: 11.5px; fill: #424a53; }
+      .arr { font-size: 11px; font-weight: 700; fill: #59636e; }
+      .small { font-size: 11px; fill: #59636e; }
+      .hostlbl { font-size: 12px; font-weight: 700; fill: #59636e; letter-spacing: 0.8px; }
+      .ok { fill: #1a7f37; }
+      .ko { fill: #cf222e; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
+    </marker>
+    <marker id="arrow-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/>
+    </marker>
+    <g id="i-ok">
+      <circle r="9" fill="#1a7f37"/>
+      <path d="M-4.5,0.5 L-1.2,3.8 L4.5,-3" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g id="i-ko">
+      <circle r="9" fill="#cf222e"/>
+      <path d="M-3.5,-3.5 L3.5,3.5 M3.5,-3.5 L-3.5,3.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="959" height="559" rx="14" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="28" y="42" class="title">Publicar puertos: abrir puertas en el host</text>
+  <text x="28" y="66" class="sub"><tspan class="mono">-p PUERTO_HOST:PUERTO_CONTENEDOR</tspan> → el host reenvía (DNAT) lo que llega a su puerto hacia el contenedor</text>
+
+  <text x="28" y="100" class="col">QUIÉN INTENTA ENTRAR</text>
+  <text x="330" y="100" class="col">PUERTA EN EL HOST</text>
+  <text x="610" y="100" class="col">CONTENEDOR</text>
+
+  <!-- HOST -->
+  <rect x="312" y="110" width="624" height="430" rx="12" fill="#f6f8fa" stroke="#8c959f" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="920" y="530" text-anchor="end" class="hostlbl">HOST · 192.168.1.20</text>
+
+  <g stroke="#d0d7de" stroke-dasharray="2 4">
+    <line x1="28" y1="217" x2="932" y2="217"/>
+    <line x1="28" y1="317" x2="932" y2="317"/>
+    <line x1="28" y1="417" x2="932" y2="417"/>
+  </g>
+
+  <!-- ====== Fila 1: -p 8080:80 (cy=168) ====== -->
+  <use href="#i-ok" x="40" y="150"/>
+  <text x="56" y="154" class="actor">Tu navegador → <tspan class="mono">localhost:8080</tspan></text>
+  <use href="#i-ok" x="40" y="182"/>
+  <text x="56" y="186" class="actor">Un compañero → <tspan class="mono">:8080</tspan></text>
+  <line x1="270" y1="168" x2="326" y2="168" stroke="#1a7f37" stroke-width="2.5" marker-end="url(#arrow-ok)"/>
+  <rect x="330" y="148" width="160" height="40" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="2"/>
+  <text x="410" y="173" text-anchor="middle" class="mono door">0.0.0.0:8080</text>
+  <text x="410" y="204" text-anchor="middle" class="doornote">abierta a todo el mundo</text>
+  <text x="548" y="160" text-anchor="middle" class="arr">DNAT</text>
+  <line x1="490" y1="168" x2="606" y2="168" stroke="#1a7f37" stroke-width="2.5" marker-end="url(#arrow-ok)"/>
+  <rect x="610" y="134" width="310" height="68" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="626" y="158" class="h">web-publica</text>
+  <text x="906" y="158" text-anchor="end" class="mono ip">172.17.0.2:80</text>
+  <text x="626" y="184" class="mono cmd">docker run -p 8080:80 nginx:alpine</text>
+
+  <!-- ====== Fila 2: -p 127.0.0.1:8081:80 (cy=268) ====== -->
+  <use href="#i-ok" x="40" y="250"/>
+  <text x="56" y="254" class="actor">Tu navegador → <tspan class="mono">localhost:8081</tspan></text>
+  <use href="#i-ko" x="40" y="282"/>
+  <text x="56" y="286" class="actor">Un compañero → <tspan class="mono">:8081</tspan></text>
+  <line x1="270" y1="268" x2="326" y2="268" stroke="#1a7f37" stroke-width="2.5" marker-end="url(#arrow-ok)"/>
+  <rect x="330" y="248" width="160" height="40" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+  <text x="410" y="273" text-anchor="middle" class="mono door">127.0.0.1:8081</text>
+  <text x="410" y="304" text-anchor="middle" class="doornote">solo desde el propio host</text>
+  <text x="548" y="260" text-anchor="middle" class="arr">DNAT</text>
+  <line x1="490" y1="268" x2="606" y2="268" stroke="#1a7f37" stroke-width="2.5" marker-end="url(#arrow-ok)"/>
+  <rect x="610" y="234" width="310" height="68" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="626" y="258" class="h">web-local</text>
+  <text x="906" y="258" text-anchor="end" class="mono ip">172.17.0.3:80</text>
+  <text x="626" y="284" class="mono cmd">docker run -p 127.0.0.1:8081:80 nginx:alpine</text>
+
+  <!-- ====== Fila 3: sin -p (cy=368) ====== -->
+  <use href="#i-ko" x="40" y="368"/>
+  <text x="56" y="372" class="actor">Nadie desde fuera del host</text>
+  <rect x="330" y="348" width="160" height="40" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="2"/>
+  <g stroke="#cf222e" stroke-opacity="0.35" stroke-width="1.5">
+    <line x1="346" y1="348" x2="346" y2="388"/><line x1="378" y1="348" x2="378" y2="388"/>
+    <line x1="442" y1="348" x2="442" y2="388"/><line x1="474" y1="348" x2="474" y2="388"/>
+    <line x1="330" y1="368" x2="350" y2="368"/><line x1="470" y1="368" x2="490" y2="368"/>
+  </g>
+  <text x="410" y="373" text-anchor="middle" class="door ko">sin puerta</text>
+  <text x="410" y="404" text-anchor="middle" class="doornote">no se usó -p</text>
+  <text x="548" y="356" text-anchor="middle" class="small">solo llegan otros</text>
+  <text x="548" y="371" text-anchor="middle" class="small">contenedores</text>
+  <text x="548" y="386" text-anchor="middle" class="small">de su misma red</text>
+  <rect x="610" y="334" width="310" height="68" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="626" y="358" class="h">web-sin-puerto</text>
+  <text x="906" y="358" text-anchor="end" class="mono ip">172.17.0.4:80</text>
+  <text x="626" y="384" class="mono cmd">docker run nginx:alpine</text>
+
+  <!-- ====== Fila 4: network host (cy=468) ====== -->
+  <use href="#i-ok" x="40" y="450"/>
+  <text x="56" y="454" class="actor">Tu navegador → <tspan class="mono">localhost:80</tspan> *</text>
+  <use href="#i-ok" x="40" y="482"/>
+  <text x="56" y="486" class="actor">Un compañero → <tspan class="mono">:80</tspan></text>
+  <text x="28" y="516" class="small">* con Docker Desktop, ver el Laboratorio 6</text>
+  <line x1="270" y1="468" x2="326" y2="468" stroke="#1a7f37" stroke-width="2.5" marker-end="url(#arrow-ok)"/>
+  <rect x="330" y="448" width="160" height="40" rx="8" fill="#fff1e5" stroke="#bc4c00" stroke-width="2"/>
+  <text x="410" y="473" text-anchor="middle" class="mono door">0.0.0.0:80</text>
+  <text x="410" y="504" text-anchor="middle" class="doornote">es el puerto real del host</text>
+  <text x="548" y="460" text-anchor="middle" class="arr">sin NAT</text>
+  <line x1="490" y1="468" x2="606" y2="468" stroke="#bc4c00" stroke-width="2.5" stroke-dasharray="6 3"/>
+  <rect x="610" y="434" width="310" height="68" rx="10" fill="#ddf4ff" stroke="#0969da" stroke-width="2"/>
+  <text x="626" y="458" class="h">web-host</text>
+  <text x="906" y="458" text-anchor="end" class="mono ip">IP del host:80</text>
+  <text x="626" y="484" class="mono cmd">docker run --network host nginx:alpine</text>
+</svg>
